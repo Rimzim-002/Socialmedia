@@ -1,46 +1,4 @@
-let postsData = [];
-let imagesData = [];
-let commentsData = [];
 let usersData = [];  // Store user data
-
-// Fetch Posts Data
-function fetchPosts() {
-  fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(response => response.json())
-    .then(posts => {
-      postsData = posts;
-      fetchImages(); // Fetch images once posts are fetched
-    })
-    .catch(error => {
-      console.log('Error fetching posts:', error);
-    });
-}
-
-// Fetch Image Data
-function fetchImages() {
-  fetch('https://api.slingacademy.com/v1/sample-data/photos?offset=5&limit=20')
-    .then(response => response.json())
-    .then(data => {
-      imagesData = data.photos;
-      fetchComments(); // Fetch comments once images are fetched
-    })
-    .catch(error => {
-      console.log('Error fetching images:', error);
-    });
-}
-
-// Fetch Comments Data
-function fetchComments() {
-  fetch('https://jsonplaceholder.typicode.com/comments')
-    .then(response => response.json())
-    .then(comments => {
-      commentsData = comments;
-      fetchUsers(); // Fetch users once comments are fetched
-    })
-    .catch(error => {
-      console.log('Error fetching comments:', error);
-    });
-}
 
 // Fetch User Data
 function fetchUsers() {
@@ -48,63 +6,39 @@ function fetchUsers() {
     .then(response => response.json())
     .then(users => {
       usersData = users;
-      renderPostsWithCommentsAndImages(); // Render posts once users are fetched
+      renderUsers(); // Render users once data is fetched
     })
     .catch(error => {
       console.log('Error fetching users:', error);
     });
 }
 
-// Render Posts with Comments, Images, and User Data
-function renderPostsWithCommentsAndImages() {
-  const postsContainer = document.querySelector(".container"); // Get the container to add posts
+// Render User Cards
+function renderUsers() {
+  const userContainer = document.querySelector('.user-cards-container'); // Get the container to add user cards
 
-  postsData.forEach((post, index) => {
-    // Get the image for the post (fallback if no image is found)
-    const postImage = imagesData[index] ? imagesData[index].url : 'https://via.placeholder.com/500x250';
+  // Loop through each user and create a card for them
+  usersData.forEach(user => {
+    // Create a new card for each user
+    const userCard = document.createElement('div');
+    userCard.classList.add('col-12', 'col-sm-6', 'col-md-4', 'col-lg-3','mb-3');
 
-    // Get the comments for the current post
-    const postComments = commentsData.filter(comment => comment.postId === post.id);
+    // Set the HTML content of the card
+    userCard.innerHTML = `
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title text-dark">${user.name}</h5> <!-- User Name -->
+      <p class="card-text text-dark">${user.company.bs}</p> <!-- Some details about the user -->
+      <a href="../Userdetail/userdetail.html?userId=${user.id}" class="btn btn-primary">View Profile</a> <!-- Link to user profile with userId -->
+    </div>
+  </div>
+`;
 
-    // Get the user for the current post using userId
-    const user = usersData.find(user => user.id === post.userId);
 
-    // Create a new card for each post
-    const postCard = document.createElement('div');
-    postCard.classList.add('card', 'post-card');
-
-    // Create the card content
-    postCard.innerHTML = `
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <!-- Display the User's Username in the Title -->
-        <h5 class="card-title mb-0">${user ? user.username : 'User not found'}</h5> <!-- User's username as card title -->
-        <span class="three-dots">...</span>
-      </div>
-
-      <img src="${postImage}" alt="Post Image" class="post-image"> <!-- Post Image -->
-
-      <div class="card-body">
-        <h5 class="card-title">${post.title}</h5>
-        <p class="card-text">${post.body}</p>
-      </div>
-
-      <div class="card-footer">
-        <p><strong>Comments:</strong></p>
-        <div class="comments-container">
-          ${postComments.map(comment => `
-            <div class="comment-box">
-              <h6 class="comment-name font-weight-bold">${comment.name}</h6> <!-- Bold Comment Name -->
-              <p class="comment-body text-muted small">${comment.body}</p> <!-- Small text for Comment Body -->
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-
-    // Append the post card to the container
-    postsContainer.appendChild(postCard);
+    // Append the user card to the container
+    userContainer.appendChild(userCard);
   });
 }
 
-// Call fetchPosts when the page is loaded
-document.addEventListener('DOMContentLoaded', fetchPosts);
+// Call fetchUsers when the page is loaded
+document.addEventListener('DOMContentLoaded', fetchUsers);

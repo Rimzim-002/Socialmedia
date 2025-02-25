@@ -57,44 +57,52 @@ function fetchUsers() {
 
 // Render Posts with Comments, Images, and User Data
 function renderPostsWithCommentsAndImages() {
-  const postsContainer = document.querySelector(".container"); // Get the container to add posts
+  const postsContainer = document.querySelector(".container");
 
   postsData.forEach((post, index) => {
-    // Get the image for the post (fallback if no image is found)
+    //comment counting........
+    const postComments = commentsData.filter(comment => comment.postId === post.id);
+    const commentCount = postComments.length;
+
+    // Get the image for the post (use placeholder if no image found)
     const postImage = imagesData[index] ? imagesData[index].url : 'https://via.placeholder.com/500x250';
 
-    // Get the comments for the current post
-    const postComments = commentsData.filter(comment => comment.postId === post.id);
-
-    // Get the user for the current post using userId
-    const user = usersData.find(user => user.id === post.userId);
-
-    // Create a new card for each post
+    // Create the post card
     const postCard = document.createElement('div');
     postCard.classList.add('card', 'post-card');
 
     // Create the card content
     postCard.innerHTML = `
       <div class="card-header d-flex justify-content-between align-items-center">
-        <!-- Display the User's Username in the Title -->
-        <h5 class="card-title mb-0">${user ? user.username : 'User not found'}</h5> <!-- User's username as card title -->
+        <h5 class="card-title mb-0">${post.userId ? usersData.name : 'User not found'}</h5>
         <span class="three-dots">...</span>
       </div>
 
-      <img src="${postImage}" alt="Post Image" class="post-image"> <!-- Post Image -->
+      <img src="${postImage}" alt="Post Image" class="post-image">
 
       <div class="card-body">
         <h5 class="card-title">${post.title}</h5>
         <p class="card-text">${post.body}</p>
       </div>
 
-      <div class="card-footer">
+      <div class="card-footer d-flex">
+        <button class="btn btn-light">
+          <i class="twemoji">&#x2764;&#xFE0F;</i> Likes
+        </button>
+        <!-- Updated comment count using commentCount -->
+        <button class="btn btn-light comment-toggle">
+          <i class="fas fa-envelope"></i> Comments (${commentCount})
+        </button>
+      </div>
+
+      <!-- Comment Section (Initially hidden) -->
+      <div class="card-footer comment-section" style="display: none;">
         <p><strong>Comments:</strong></p>
         <div class="comments-container">
           ${postComments.map(comment => `
             <div class="comment-box">
-              <h6 class="comment-name font-weight-bold">${comment.name}</h6> <!-- Bold Comment Name -->
-              <p class="comment-body text-muted small">${comment.body}</p> <!-- Small text for Comment Body -->
+              <h6 class="comment-name font-weight-bold">${comment.name}</h6>
+              <p class="comment-body text-muted small">${comment.body}</p>
             </div>
           `).join('')}
         </div>
@@ -105,6 +113,15 @@ function renderPostsWithCommentsAndImages() {
     postsContainer.appendChild(postCard);
   });
 }
+
+// Toggle comments visibility when clicking on the comment button
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('comment-toggle')) {
+    const commentSection = e.target.closest('.card').querySelector('.comment-section');
+    commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
+  }
+});
+
 
 // Call fetchPosts when the page is loaded
 document.addEventListener('DOMContentLoaded', fetchPosts);
