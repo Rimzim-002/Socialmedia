@@ -1,0 +1,63 @@
+/* Gradient Background */
+.gradient-background {
+    background: linear-gradient(to right, #3498db, #2ecc71); /* Blue to Green */
+    padding: 20px;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.post-card {
+    max-width: 500px;
+    margin: 20px auto;
+}
+.three-dots {
+    cursor: pointer;
+}
+.post-image {
+    max-height: 250px;
+    object-fit: cover;
+    width: 100%;
+}
+.comment-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+/* Prevent horizontal scrolling */
+html, body {
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    box-sizing: border-box; /* Ensure padding and borders are included in width/height */
+  }
+  
+  * {
+    box-sizing: inherit; /* Apply the same box-sizing globally */
+  }
+  
+  /* Optional: Add any padding/margins you may need for your design */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Ensure that images scale properly */
+  img {
+    max-width: 100%; /* Ensure images do not overflow */
+    height: auto; /* Maintain aspect ratio */
+  }
+  
+  /* Optional: Add some spacing for posts */
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .card-title{
+    font-size:larger;
+
+  }
+  .card-text{
+    font-size:small;
+    color:darkgray;
+  }
+  

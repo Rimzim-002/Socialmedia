@@ -1,0 +1,61 @@
+
+.card-body {
+    padding: 0.75rem; /* Adjust card body padding */
+}
+
+.card-title {
+    font-size: 1rem; /* Smaller font for the title */
+}
+
+.card-text {
+    font-size: 0.85rem; /* Smaller font for text */
+}
+
+.btn-sm {
+    padding: 0.3rem 0.5rem; /* Adjust button padding */
+    font-size: 0.75rem; /* Smaller font for the button */
+}
+/* Apply a two-shade gradient background */
+.gradient-background {
+    background: linear-gradient(to right, #3498db, #2ecc71); /* Blue to Green */
+    padding: 40px;
+    color: white;
+    text-align: center;
+    position: relative; /* Allows overlapping of elements */
+}
+
+/* Make the cards section overlap the gradient */
+
+/* Optionally, make the card hover effect */
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+/* Apply a two-shade gradient background */
+.gradient-background {
+    background: linear-gradient(to right, #3498db, #2ecc71); /* Blue to Green */
+    padding: 40px;
+    color: white;
+    text-align: center;
+    position: relative; /* Allows the overlap */
+    z-index: 1; /* Ensure the gradient background is in the background */
+}
+
+/* Make the cards section overlap the gradient */
+.cards-section {
+    position: relative;
+    top: -80px; /* This controls the overlap amount */
+    z-index: 2; /* Ensures the cards are above the gradient section */
+}
+
+/* Add spacing between cards and make the cards look nicer */
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05); /* Slight scaling effect when hovering over cards */
+}

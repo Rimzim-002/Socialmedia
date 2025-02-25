@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page</title>
+     <link href="../Css/users.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Apply a two-shade gradient background */
+        .gradient-background {
+            background: linear-gradient(to right, #3498db, #2ecc71); /* Blue to Green */
+            padding: 40px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid py-5 bg-">
+        <h2 class="text-center">Welcome!</h2>
+        
+        <!-- Gradient Background Section -->
+        <div class="gradient-background h-100">
+            <h3>Users</h3>
+            <!-- <p>This is a special section with a gradient background</p> -->
+        </div>
+        
+        <!-- Users Section (Add more content or cards as needed) -->
+        <div class="cards-section">
+            <div class="container-fluid py-5">
+                <div class="row user-cards-container">
+                    <!-- Example of a user card -->
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card">
+                            <img src="../assets/Dummyimage.png" class="card-img-top img-fluid" alt="User">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark">User Name</h5>
+                                <p class="card-text text-dark">Some details about the user here.</p>
+                                <a href="" class="btn btn-primary">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- More user cards can be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="../javascript/users.js"></script>
+</body>
+
+</html>
