@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">    
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,12 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../Css/homepage.css" rel="stylesheet">
+    <!-- Add Font Awesome CDN in the <head> section -->
+    <!-- Add Font Awesome CDN in the <head> section -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 </head>
+
 <body>
     <div>
         <div class="gradient-background">
@@ -17,52 +23,36 @@
         <!-- Container for responsive posts -->
         <div class="container my-4">
             <div class="row"> <!-- Bootstrap Grid Row for Responsiveness -->
-                <!-- Post Card -->
-                <div class="col-12 col-md-6 col-lg-4 mb-4"> <!-- Responsive Column for Post Cards -->
-                    <div class="card post-card">
-                        <!-- Post Header: User Name and Post Title -->
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">John Doe</h5>
-                            <span class="three-dots">...</span>
-                        </div>
+                <div class="card post-card">
 
-                        <!-- Post Image -->
-                        <img src="https://via.placeholder.com/500x250" alt="Post Image" class="post-image img-fluid"> <!-- Added img-fluid for responsiveness -->
-
-                        <!-- Post Body -->
-                        <div class="card-body">
-                            <h5 class="card-title">Accusamus Beatae Ad Facilisis</h5>
-                            <p class="card-text">This is a post about accusamus beatae ad facilis cum similique qui sunt. Nulla facilisi. Aenean non libero euismod, volutpat purus ac, fringilla lectus. Quisque efficitur turpis ac urna dapibus, sit amet tempor purus auctor.</p>
-                        </div>
-
-                        <!-- Comments Section -->
-                        <div class="card-footer">
-                            <p><strong>Comments:</strong></p>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <!-- <img src="https://via.placeholder.com/40" alt="Commenter Image" class="comment-image"> -->
-                                            <div class="ms-2">
-                                                <strong>Jane Smith</strong>
-                                                <p class="mb-0">This is a really great post! Keep it up!</p>
-                                            </div>
-                                        </div>
-                                        <div class="three-dots">...</div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
-                <!-- Repeat the above block for more posts -->
             </div>
         </div>
-
     </div>
+</div>
+
+
+
+
+
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../javascript/homepage.js"></script>
+    <script>
+        // Get the comment toggle button and the comment section
+        const commentToggleButton = document.getElementById("comment-toggle");
+        const commentSection = document.getElementById("comment-section");
+
+        // Toggle the visibility of the comments section when the button is clicked
+        commentToggleButton.addEventListener("click", function () {
+            if (commentSection.style.display === "none" || commentSection.style.display === "") {
+                commentSection.style.display = "block"; // Show comments
+            } else {
+                commentSection.style.display = "none"; // Hide comments
+            }
+        });
+    </script>
 </body>
+
 </html>
