@@ -1,127 +1,144 @@
 let postsData = [];
 let imagesData = [];
 let commentsData = [];
-let usersData = []; // Store user data
+let usersData = [];
 
 // Fetch Posts Data
 function fetchPosts() {
-  fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(response => response.json())
-    .then(posts => {
-      postsData = posts;
-      fetchImages(); // Fetch images once posts are fetched
-    })
-    .catch(error => {
-      console.log('Error fetching posts:', error);
-    });
+    fetch('https://jsonplaceholder.typicode.com/posts')
+        .then(response => response.json())
+        .then(posts => {
+            postsData = posts;
+            fetchImages();
+        })
+        .catch(error => {
+            console.log('Error fetching posts:', error);
+        });
 }
 
 // Fetch Image Data
 function fetchImages() {
-  fetch('https://api.slingacademy.com/v1/sample-data/photos?offset=5&limit=50')
-    .then(response => response.json())
-    .then(data => {
-      imagesData = data.photos;
-      fetchComments(); // Fetch comments once images are fetched
-    })
-    .catch(error => {
-      console.log('Error fetching images:', error);
-    });
+    fetch('https://api.slingacademy.com/v1/sample-data/photos?offset=5&limit=50')
+        .then(response => response.json())
+        .then(data => {
+            imagesData = data.photos;
+            fetchComments();
+        })
+        .catch(error => {
+            console.log('Error fetching images:', error);
+        });
 }
 
 // Fetch Comments Data
 function fetchComments() {
-  fetch('https://jsonplaceholder.typicode.com/comments')
-    .then(response => response.json())
-    .then(comments => {
-      commentsData = comments;
-      fetchUsers(); // Fetch users once comments are fetched
-    })
-    .catch(error => {
-      console.log('Error fetching comments:', error);
-    });
+    fetch('https://jsonplaceholder.typicode.com/comments')
+        .then(response => response.json())
+        .then(comments => {
+            commentsData = comments;
+            fetchUsers();
+        })
+        .catch(error => {
+            console.log('Error fetching comments:', error);
+        });
 }
 
 // Fetch User Data
 function fetchUsers() {
-  fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    .then(users => {
-      usersData = users;
-      renderPostsWithCommentsAndImages(); // Render posts once users are fetched
-    })
-    .catch(error => {
-      console.log('Error fetching users:', error);
-    });
+    fetch('https://jsonplaceholder.typicode.com/users')
+        .then(response => response.json())
+        .then(users => {
+            usersData = users;
+            renderPostsWithCommentsAndImages();
+        })
+        .catch(error => {
+            console.log('Error fetching users:', error);
+        });
 }
 
 // Render Posts with Comments, Images, and User Data
 function renderPostsWithCommentsAndImages() {
   const postsContainer = document.querySelector(".container");
+  postsContainer.innerHTML = ""; // Clear previous posts
+
+  // Apply Flexbox layout
+  postsContainer.classList.add("d-flex", "flex-wrap", "gap-3", "align-items-start");
 
   postsData.forEach((post, index) => {
-    //comment counting........
-    const postComments = commentsData.filter(comment => comment.postId === post.id);
-    const commentCount = postComments.length;
+      // Get the user data for this post
+      const user = usersData.find(user => user.id === post.userId);
+      const userName = user ? user.name : "Unknown User";
 
-    // Get the image for the post (use placeholder if no image found)
-    const postImage = imagesData[index] ? imagesData[index].url : 'https://via.placeholder.com/500x250';
+      // Get the image for the post (use placeholder if no image found)
+      const postImage = imagesData[index] ? imagesData[index].url : 'https://via.placeholder.com/500x250';
 
-    // Create the post card
-    const postCard = document.createElement('div');
-    postCard.classList.add('card', 'post-card');
+      // Get comments related to this post
+      const postComments = commentsData.filter(comment => comment.postId === post.id);
+      const commentCount = postComments.length;
 
-    // Create the card content
-    postCard.innerHTML = `
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">${post.userId ? usersData.name : 'User not found'}</h5>
-        <span class="three-dots">...</span>
-      </div>
+      // Create the post card
+      const postCard = document.createElement('div');
+      postCard.classList.add('card', 'post-card', 'shadow-sm', 'p-3', 'rounded');
+      postCard.style.width = "350px"; // Fixed width for cards
+      postCard.style.display = "flex";
+      postCard.style.flexDirection = "column";
 
-      <img src="${postImage}" alt="Post Image" class="post-image">
+      postCard.innerHTML = `
+          <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+              <h6 class="card-title mb-0">${userName}</h6>
+              <span class="three-dots">⋮</span>
+          </div>
 
-      <div class="card-body">
-        <h5 class="card-title">${post.title}</h5>
-        <p class="card-text">${post.body}</p>
-      </div>
+          <img src="${postImage}" alt="Post Image" class="post-image w-100 rounded" style="height: 200px; object-fit: cover;">
 
-      <div class="card-footer d-flex">
-        <button class="btn btn-light">
-          <i class="twemoji">&#x2764;&#xFE0F;</i> Likes
-        </button>
-        <!-- Updated comment count using commentCount -->
-        <button class="btn btn-light comment-toggle">
-          <i class="fas fa-envelope"></i> Comments (${commentCount})
-        </button>
-      </div>
+          <div class="card-body">
+              <h5 class="card-title">${post.title}</h5>
+              <p class="card-text">${post.body}</p>
+          </div>
 
-      <!-- Comment Section (Initially hidden) -->
-      <div class="card-footer comment-section" style="display: none;">
-        <p><strong>Comments:</strong></p>
-        <div class="comments-container">
-          ${postComments.map(comment => `
-            <div class="comment-box">
-              <h6 class="comment-name font-weight-bold">${comment.name}</h6>
-              <p class="comment-body text-muted small">${comment.body}</p>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
+          <div class="card-footer d-flex justify-content-between bg-light">
+              <button class="btn btn-outline-danger">
+                  ❤️ Likes
+              </button>
+              <button class="btn btn-outline-dark comment-toggle" data-post-id="${post.id}">
+                  💬 Comments (${commentCount})
+              </button>
+          </div>
 
-    // Append the post card to the container
-    postsContainer.appendChild(postCard);
+          <!-- Comment Section (Initially hidden) -->
+          <div class="card-footer comment-section bg-white border-top p-2" id="comment-section-${post.id}" style="display: none;">
+              <p><strong>Comments:</strong></p>
+              <div class="comments-container" style="max-height: 150px; overflow-y: auto;">
+                  ${postComments.map(comment => `
+                      <div class="comment-box p-2 border rounded my-1">
+                          <h6 class="font-weight-bold">${comment.name}</h6>
+                          <p class="small text-muted">${comment.body}</p>
+                      </div>
+                  `).join('')}
+              </div>
+          </div>
+      `;
+
+      // Append the post card to the container
+      postsContainer.appendChild(postCard);
   });
 }
 
-// Toggle comments visibility when clicking on the comment button
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('comment-toggle')) {
-    const commentSection = e.target.closest('.card').querySelector('.comment-section');
-    commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
-  }
-});
 
+// ✅ Toggle comments visibility (Only one post opens at a time)
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('comment-toggle')) {
+        const postId = e.target.getAttribute('data-post-id');
+        const allComments = document.querySelectorAll('.comment-section');
+
+        allComments.forEach(section => {
+            if (section.id === `comment-section-${postId}`) {
+                section.style.display = section.style.display === "none" ? "block" : "none";
+            } else {
+                section.style.display = "none";
+            }
+        });
+    }
+});
 
 // Call fetchPosts when the page is loaded
 document.addEventListener('DOMContentLoaded', fetchPosts);

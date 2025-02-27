@@ -2,42 +2,41 @@ let usersData = [];  // Store user data
 
 // Fetch User Data
 function fetchUsers() {
-  fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    .then(users => {
-      usersData = users;
-      renderUsers(); // Render users once data is fetched
-    })
-    .catch(error => {
-      console.log('Error fetching users:', error);
-    });
+    fetch('https://jsonplaceholder.typicode.com/users')
+        .then(response => response.json())
+        .then(users => {
+            usersData = users;
+            renderUsers();
+        })
+        .catch(error => {
+            console.log('Error fetching users:', error);
+        });
 }
 
 // Render User Cards
 function renderUsers() {
-  const userContainer = document.querySelector('.user-cards-container'); // Get the container to add user cards
+    const userContainer = document.querySelector('.user-cards-container');
+    userContainer.innerHTML = ""; // Clear previous content
 
-  // Loop through each user and create a card for them
-  usersData.forEach(user => {
-    // Create a new card for each user
-    const userCard = document.createElement('div');
-    userCard.classList.add('col-12', 'col-sm-6', 'col-md-4', 'col-lg-3','mb-3');
+    usersData.forEach(user => {
+        const userCard = document.createElement('div');
+        userCard.classList.add('col-12', 'col-sm-6', 'col-md-4', 'col-lg-3', 'mb-4');
 
-    // Set the HTML content of the card
-    userCard.innerHTML = `
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title text-dark">${user.name}</h5> <!-- User Name -->
-      <p class="card-text text-dark">${user.company.bs}</p> <!-- Some details about the user -->
-      <a href="../Userdetail/userdetail.html?userId=${user.id}" class="btn btn-primary">View Profile</a> <!-- Link to user profile with userId -->
+        userCard.innerHTML = `
+    <div class="card user-card shadow text-center">
+        <div class="card-body">
+            <!-- Dummy Profile Picture -->
+            <img src="../assests/Dummyimage.png" class="border shadow-sm rounded-circle mb-3" alt="Profile Picture" width="100" height="100">
+            
+            <h5 class="card-title">${user.name}</h5>
+            <p class="card-text text-muted">${user.company.bs}</p>
+            <a href="../Userdetail/userdetail.html?userId=${user.id}" class="btn view-profile-btn">View Profile</a>
+        </div>
     </div>
-  </div>
 `;
 
-
-    // Append the user card to the container
-    userContainer.appendChild(userCard);
-  });
+        userContainer.appendChild(userCard);
+    });
 }
 
 // Call fetchUsers when the page is loaded

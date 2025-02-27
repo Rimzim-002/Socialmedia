@@ -1,260 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Posts with Comments, Images, and Edit/Delete Options</title>
+    <title>User Posts</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href='../Css/userdetails.css'>
 
-    <style>
-        /* Styling for smaller cards */
-        .post-card {
-            max-width: 400px; /* Adjust the width of the cards */
-            margin: 10px auto; /* Center cards horizontally */
-        }
-
-        .comment-section {
-            display: none; /* Hide comments by default */
-        }
-
-        .comments-container {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-    
-        .gradient-background {
-            background: linear-gradient(to right, #3498db, #2ecc71); /* Blue to Green */
-            padding: 40px;
-            color: white;
-            text-align: center;
-        }
-    </style>
 </head>
+
 <body>
-    <div class="gradient-background h-100">
-        <h3>Users</h3>
-       
+    <div class="gradient-background d-flex justify-content-between align-items-center p-3">
+        <a href="../users/users.html" class="text-white text-decoration-none fs-4">
+            Back to users <i class="fas fa-arrow-left "></i>
+        </a>
+        <h1 class="text-center flex-grow-1">User Details</h1>
+
     </div>
 
     <div class="container mt-5">
         <div id="user-details"></div>
-        <div id="user-posts" class="mt-4"></div>
-    </div>
 
-    <!-- Pop-up for Edit/Delete (hidden by default) -->
-    <div id="popupMenu" class="card popup-menu" style="display:none; position: absolute; background-color: white; border: 1px solid #ddd; width: 200px; z-index: 10; border-radius: 5px;">
-        <div class="list-group">
-            <button id="editPost" class="list-group-item list-group-item-action">Edit</button>
-            <button id="deletePost" class="list-group-item list-group-item-action text-danger">Delete</button>
+        <div class="mt-4 p-4 rounded shadow-lg bg-light custom-post-card">
+            <h5 class="text-primary fw-bold">Add New Post</h5>
+            <input type="text" id="new-post-title" class="form-control mt-2 border-0 shadow-sm" placeholder="Title"
+                required>
+            <textarea id="new-post-body" class="form-control mt-2 border-0 shadow-sm" placeholder="Body" rows="4"
+                required></textarea>
+            <button id="add-post" class="btn btn-primary mt-3 px-4 fw-bold shadow-sm">➕ Add Post</button>
         </div>
+
+        <div id="user-posts" class="mt-4"></div>
+        <button id="load-more" class="btn btn-primary d-block mx-auto mt-3">Load More Posts</button>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Declare global variables
-        let postsData = [];
-        let imagesData = [];
-        let commentsData = [];
-        let usersData = []; // Store user data
-        let currentPostId = null;
-
-        // Get userId from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = parseInt(urlParams.get('userId'));
-
-        // Fetch Posts Data
-        function fetchPosts() {
-            fetch('https://jsonplaceholder.typicode.com/posts')
-                .then(response => response.json())
-                .then(posts => {
-                    postsData = posts;
-                    fetchImages(); // Fetch images once posts are fetched
-                })
-                .catch(error => {
-                    console.log('Error fetching posts:', error);
-                });
-        }
-
-        // Fetch Image Data
-        function fetchImages() {
-            fetch('https://api.slingacademy.com/v1/sample-data/photos?offset=5&limit=50')
-                .then(response => response.json())
-                .then(data => {
-                    imagesData = data.photos;
-                    fetchComments(); // Fetch comments once images are fetched
-                })
-                .catch(error => {
-                    console.log('Error fetching images:', error);
-                });
-        }
-
-        // Fetch Comments Data
-        function fetchComments() {
-            fetch('https://jsonplaceholder.typicode.com/comments')
-                .then(response => response.json())
-                .then(comments => {
-                    commentsData = comments;
-                    fetchUsers(); // Fetch users once comments are fetched
-                })
-                .catch(error => {
-                    console.log('Error fetching comments:', error);
-                });
-        }
-
-        // Fetch User Data
-        function fetchUsers() {
-            fetch('https://jsonplaceholder.typicode.com/users')
-                .then(response => response.json())
-                .then(users => {
-                    usersData = users;
-                    renderUserDetails(userId); // Pass userId to render details dynamically
-                })
-                .catch(error => {
-                    console.log('Error fetching users:', error);
-                });
-        }
-
-        // Render User Details dynamically
-        function renderUserDetails(userId) {
-            const user = usersData.find(u => u.id === userId);
-
-            if (user) {
-                // Render user details
-                const userDetailsContainer = document.getElementById("user-details");
-                userDetailsContainer.innerHTML = `
-                    <div class="card ">
-                        <div class="card-body">
-                            <h5 class="card-title">${user.name}</h5>
-                            <p class="card-text"><i class="fas fa-envelope"></i> ${user.email}</p>
-                            <p class="card-text"><i class="fas fa-phone"></i> ${user.phone}</p>
-                            <p class="card-text"><i class="fas fa-map-marker-alt"></i> ${user.address.street}, ${user.address.city}</p>
-                        </div>
-                    </div>
-                `;
-
-                renderPostsWithCommentsAndImages(userId); // Render posts once user details are rendered
-            }
-        }
-
-        // Render Posts with Comments, Images, and User Data
-        function renderPostsWithCommentsAndImages(userId) {
-            const postsContainer = document.getElementById("user-posts");
-            postsContainer.innerHTML = ''; // Clear existing posts
-
-            const userPosts = postsData.filter(post => post.userId === userId);
-
-            userPosts.forEach((post, index) => {
-                const postComments = commentsData.filter(comment => comment.postId === post.id);
-                const commentCount = postComments.length;
-                const postImage = imagesData[index] ? imagesData[index].url : 'https://via.placeholder.com/500x250';
-
-                // Find the user who created this post based on userId
-                const user = usersData.find(u => u.id === post.userId);
-                const userName = user ? user.name : 'User not found';  // Dynamically display the user name or fallback
-
-                const postCard = document.createElement('div');
-                postCard.classList.add('card', 'post-card');
-
-                postCard.innerHTML = `
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">${userName}</h5>
-                        <span class="three-dots" data-post-id="${post.id}" style="cursor: pointer;">...</span>
-                    </div>
-
-                    <img src="${postImage}" alt="Post Image" class="post-image">
-
-                    <div class="card-body">
-                        <h5 class="card-title">${post.title}</h5>
-                        <p class="card-text">${post.body}</p>
-                    </div>
-
-                    <div class="card-footer d-flex">
-                        <button class="btn btn-light">
-                            <i class="twemoji">&#x2764;&#xFE0F;</i> Likes
-                        </button>
-                        <button class="btn btn-light comment-toggle">
-                            <i class="fas fa-envelope"></i> Comments (${commentCount})
-                        </button>
-                    </div>
-
-                    <div class="card-footer comment-section">
-                        <p><strong>Comments:</strong></p>
-                        <div class="comments-container">
-                            ${postComments.map(comment => `
-                                <div class="comment-box">
-                                    <h6 class="comment-name font-weight-bold">${comment.name}</h6>
-                                    <p class="comment-body text-muted small">${comment.body}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-
-                postsContainer.appendChild(postCard);
-            });
-        }
-
-        // Toggle comments visibility
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('comment-toggle')) {
-                const commentSection = e.target.closest('.card').querySelector('.comment-section');
-                // Toggle display of the comments section
-                commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
-            }
-
-            // Show the popup menu for Edit/Delete when clicking on three dots
-            if (e.target.classList.contains('three-dots')) {
-                currentPostId = parseInt(e.target.getAttribute('data-post-id')); // Get the post ID
-                const popupMenu = document.getElementById("popupMenu");
-                popupMenu.style.left = `${e.clientX}px`; // Position the popup horizontally
-                popupMenu.style.top = `${e.clientY}px`;  // Position the popup vertically
-                popupMenu.style.display = 'block'; // Show the popup
-            }
-        });
-
-        // Handle Edit and Delete actions
-        document.getElementById('editPost').addEventListener('click', function() {
-            editPost(currentPostId);
-            closePopup(); // Close the popup after edit
-        });
-
-        document.getElementById('deletePost').addEventListener('click', function() {
-            deletePost(currentPostId);
-            closePopup(); // Close the popup after delete
-        });
-
-        // Edit post function (just for demonstration)
-        function editPost(postId) {
-            console.log('Edit post with ID:', postId);
-            // Here, you can implement a form or redirect the user to an edit page
-        }
-
-        // Delete post function (just for demonstration)
-        function deletePost(postId) {
-            console.log('Delete post with ID:', postId);
-            // Here, you can add the logic to delete the post, for example, calling an API or removing it from the DOM
-        }
-
-        // Close the popup menu
-        function closePopup() {
-            document.getElementById("popupMenu").style.display = 'none';
-        }
-
-        // Close the popup if clicking outside of it
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('#popupMenu') && !e.target.closest('.three-dots')) {
-                closePopup();
-            }
-        });
-
-        // Call fetchPosts when the page is loaded
-        document.addEventListener('DOMContentLoaded', fetchPosts);
-    </script>
+    <script src="../javascript/userdetail.js"></script>
 
 </body>
+
 </html>
