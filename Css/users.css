@@ -18,15 +18,12 @@
 /* Apply a two-shade gradient background */
 .gradient-background {
     background: linear-gradient(to right, #3498db, #2ecc71); /* Blue to Green */
-    padding: 40px;
+    padding: 80px;
     color: white;
     text-align: center;
     position: relative; /* Allows overlapping of elements */
 }
 
-/* Make the cards section overlap the gradient */
-
-/* Optionally, make the card hover effect */
 .card {
     transition: transform 0.3s ease;
 }
