@@ -49,15 +49,7 @@ The following API endpoints are utilized in this project:
 - **Bootstrap**: Ensures a responsive design.
 - **JavaScript**: Manages API integration and interactions.
 
-## Installation
 
-To get started, clone this repository to your local machine:
-
-```bash
-git clone https://github.com/yourusername/yourrepository.git
-cd yourrepository
-# Open index.html in a browser
-```
 
 ## Usage
 
