@@ -36,9 +36,12 @@ function renderUserDetails(user) {
         <div class="card text-center shadow-lg custom-hover">
             <div class="card-body">
                 <img src="../assests/Dummyimage.png" alt="Profile Picture" style="width: 100px; height: 100px;">
-                <h5 class="card-title">${user.name}</h5>
-                <p class="card-text">${user.email}</p>
-                <p class="card-text">${user.phone}</p>
+                <h5 class="card-title">${user?.name}</h5>
+                <p class="card-text">Email: ${user?.email}</p>
+                <p class="card-text"> Phone number :${user?.phone}</p>
+                                <p class="card-text">Address : ${user?.address?.city}</p>
+
+
             </div>
         </div>
     `;
@@ -77,7 +80,7 @@ function renderPosts() {
             </div>
             <div class="card-footer d-flex justify-content-between bg-light rounded-bottom">
                 <button class="btn btn-outline-dark comment-toggle" onclick="toggleComments(${post.id})">
-                    <i class="fas fa-comments"></i> Comments
+                    <i class="fas fa-comments"></i> Comments (<span id="comment-count-${post.id}">0</span>)
                 </button>
             </div>
             <div class="card-footer comment-section bg-white border-top p-2" id="comment-section-${post.id}" style="display: none;">
@@ -89,11 +92,21 @@ function renderPosts() {
         `;
 
         postsContainer.appendChild(postCard);
+        fetchCommentCount(post.id); // Fetch and update comment count
         fetchComments(post.id); // Fetch and render comments
     });
 
     loadedPosts += batchSize; // Increase the number of loaded posts for next batch
 }
+function fetchCommentCount(postId) {
+    fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`)
+        .then(response => response.json())
+        .then(comments => {
+            document.getElementById(`comment-count-${postId}`).innerText = comments.length;
+        })
+        .catch(error => console.error('Error fetching comment count:', error));
+}
+
 
      // ✅ Function to toggle comments (Only one post opens at a time)
       function toggleComments(postId) {
