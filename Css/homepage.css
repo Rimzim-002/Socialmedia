@@ -6,7 +6,10 @@
     text-align: center;
     position: relative;
 }
+.card-header{
+  background: linear-gradient(to right, #3498db, #2ecc71); /* Blue to Green */
 
+}
 .post-card {
     max-width: 500px;
     margin: 20px auto;
